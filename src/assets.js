@@ -14,6 +14,9 @@ export const DIFF_CSS = read('./themes/diff.css');
 export const DELTA_CSS = read('./themes/delta.css');
 export const RTL_CSS = read('./themes/rtl.css');
 export const CHART_CSS = read('./themes/chart.css');
+export const ANNOT_CSS = read('./themes/annot-css.css');
+// ai-figure's minified browser build, compiled on the first aifig block (src/aifigure.js).
+export const AIFIG_JS = read('../node_modules/ai-figure/dist/index.global.js');
 export const MATH_CSS = composeMathCss(read('./themes/math.css'));
 // A theme's own font face, by the name its `font` field gives (src/themes/font-css.js).
 export const FONT_CSS = Object.fromEntries(FONT_NAMES.map((name) => [name, composeFontCss(name)]));

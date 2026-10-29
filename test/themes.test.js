@@ -81,6 +81,24 @@ test('themes: decoration rules apply only under their own theme', async () => {
   assert.doesNotMatch(html, /data-theme="3b1b"/, 'video-only themes stay out of pages');
 });
 
+// The colors of a theme's own block in the page stylesheet: light, then dark.
+const themeBlock = (html, name, mode) => html.match(new RegExp(`html\\[data-theme="${name}"\\]\\[data-mode="${mode}"\\] \\{([\\s\\S]*?)\\}`))[1];
+
+test('themes: wada is a page and video theme that passes the color checks in both modes', async () => {
+  const { getTheme } = await import('../src/themes/registry.js');
+  const { checkColors } = await import('../src/themes/check.js');
+  const wada = getTheme('wada');
+  assert.ok(wada, 'wada is registered');
+  assert.deepEqual(wada.scope, ['page', 'video']);
+  assert.deepEqual(checkColors(wada), { errors: [], warnings: [] });
+  const { html } = renderDoc('## A Flow\nPlain English text here.\n```flow\nA -> B\n```\n', { theme: 'wada' });
+  assert.match(html, /<html lang="en" data-theme="wada"/);
+  // The palette applies to text, to a badge and to the diagram, which defaults to the theme's paper and ink.
+  assert.match(themeBlock(html, 'wada', 'light'), /--paper: #fffdfc;/);
+  assert.match(themeBlock(html, 'wada', 'dark'), /--ink: #f7ebe7;/);
+  assert.match(html, /class="am-node-shape"/);
+});
+
 test('themes: a theme with a fixed mode forces it in video', async () => {
   const { html } = await renderVideo(VIDEO, { overrides: { theme: '3b1b', mode: 'light' } });
   assert.match(html, /data-theme="3b1b" data-mode="dark"/);

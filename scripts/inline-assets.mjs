@@ -8,7 +8,9 @@ import { composeFontCss, FONT_NAMES } from '../src/themes/font-css.js';
 // Normalize to LF so the bundle does not depend on the checkout's line-ending settings.
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8').replace(/\r\n?/g, '\n');
 
-export const inlineAssets = {
+// aifig: false leaves ai-figure's browser build out. The website's engine is checked for Node-only code (site/build.mjs), and the
+// library's bundled module shim names require and Buffer; no page the website renders has an aifig block, so it carries none.
+export const inlineAssets = ({ aifig = true } = {}) => ({
   name: 'inline-assets',
   setup(b) {
     b.onLoad({ filter: /src[\\/]assets\.js$/ }, () => ({
@@ -21,6 +23,8 @@ export const inlineAssets = {
         `export const DELTA_CSS = ${JSON.stringify(read('../src/themes/delta.css'))};`,
         `export const RTL_CSS = ${JSON.stringify(read('../src/themes/rtl.css'))};`,
         `export const CHART_CSS = ${JSON.stringify(read('../src/themes/chart.css'))};`,
+        `export const ANNOT_CSS = ${JSON.stringify(read('../src/themes/annot-css.css'))};`,
+        `export const AIFIG_JS = ${JSON.stringify(aifig ? read('../node_modules/ai-figure/dist/index.global.js') : '')};`,
         `export const MATH_CSS = ${JSON.stringify(composeMathCss(read('../src/themes/math.css')))};`,
         `export const FONT_CSS = ${JSON.stringify(Object.fromEntries(FONT_NAMES.map((name) => [name, composeFontCss(name)])))};`,
         `export const DELTA_JS = ${JSON.stringify(read('../src/runtime/delta.js'))};`,
@@ -36,4 +40,4 @@ export const inlineAssets = {
       ].join('\n'),
     }));
   },
-};
+});
