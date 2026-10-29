@@ -7,7 +7,7 @@
 ````markdown
 ---
 template: sheet        # sheet = grid of panels (default), doc = one column with an outline rail
-theme: auto            # auto (default) picks paper for long text, blueprint for diagrams; or blueprint, shadcn, paper, your own theme
+theme: auto            # auto (default) picks paper for long text, blueprint for diagrams; or blueprint, shadcn, paper, wada, your own theme
 title: Page title
 subtitle: One line
 cols: 3                # columns for sheet (a whole number)
@@ -357,7 +357,7 @@ am serve --tailscale  # listen on your Tailscale address only; open the links fr
 | Key | Default | What it does |
 | :--- | :--- | :--- |
 | `open` | `on` | Open each page in the browser after it is made. Turn it off if pop-ups interrupt you |
-| `theme` | `auto` | Default theme: `auto` (paper for long text, blueprint for diagrams), `blueprint`, `shadcn`, `paper`, or your own theme |
+| `theme` | `auto` | Default theme: `auto` (paper for long text, blueprint for diagrams), `blueprint`, `shadcn`, `paper`, `wada`, or your own theme |
 | `mode` | `auto` | Default color mode: `auto`, `light` or `dark` |
 | `style` | `80` | Writing check: `off`, `80` (warn only) or `strict` (refuse to render) |
 | `scale` | `1` | Text size on the page: 0.8–1.5 in steps of 0.05. 1.2 makes text 20% larger; diagrams and charts grow with it. The toolbar's A− / A+ buttons change it too; the choice is remembered in this browser and wins over this setting, but under `am serve` it lasts for the tab only |

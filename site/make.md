@@ -12,7 +12,7 @@ You are an agent. Your user wants a theme for Answer me with HTML, a tool that t
 
 1. Read the catalog list: https://answer-me-with-html.com/themes/index.json (name, label, description of each theme).
 2. Pick the theme whose look is closest to what the user asked for. Catalog themes already pass every catalog rule, so a start from one of them passes too in most cases.
-3. Pick a name for the new theme: lowercase letters, digits and `-`, at most 40 characters. It must not be a built-in theme (`blueprint`, `shadcn`, `paper`, `3b1b`), `index`, `new`, or a name in the catalog list.
+3. Pick a name for the new theme: lowercase letters, digits and `-`, at most 40 characters. It must not be a built-in theme (`blueprint`, `shadcn`, `paper`, `wada`, `3b1b`), `index`, `new`, or a name in the catalog list.
 4. Download the start and save it as `~/.answer-me-with-html/themes/<name>.json` (`$AM_HOME/themes/` when `AM_HOME` is set):
 
 ```bash

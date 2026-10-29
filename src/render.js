@@ -271,6 +271,10 @@ export const hasDelta = (html) => html.includes('class="am-delta-bar"');
 // A chart (src/components/chart.js) needs its own styles, as a formula needs the math ones.
 export const hasChart = (html) => html.includes('class="am-diagram am-chart"');
 
+// annot-css brings a stylesheet of its own (src/themes/annot-css.css); a page without it stays small. An aifig figure carries
+// its styles inside its own svg, so it needs nothing here.
+export const hasAnnotCss = (html) => html.includes('class="ann ');
+
 function lightboxShell(ui, hasDiagrams) {
   if (!hasDiagrams) return '';
   return `<div class="am-lightbox" hidden aria-modal="true" role="dialog" aria-label="${esc(ui.diagram)}" data-expand="${esc(ui.expand)}">
@@ -288,6 +292,20 @@ function lightboxShell(ui, hasDiagrams) {
 <div class="am-lightbox-canvas am-diagram"></div>
 </div>
 </div>
+`;
+}
+
+// The "Was this helpful?" row at the end of the page (src/runtime/feedback.js). A page has no server, so a vote changes the
+// page only: the styles read aria-pressed, and the status line says thanks. The labels are the page language's.
+function feedbackRow(ui) {
+  const f = ui.feedback;
+  if (!f) return '';
+  const vote = (kind, label) => `<button class="am-btn am-feedback-btn" type="button" data-vote="${kind}" aria-pressed="false"><span aria-hidden="true">${kind === 'up' ? '👍' : '👎'}</span>${esc(label)}</button>`;
+  return `<section class="am-feedback" data-am="feedback" data-thanks="${esc(f.thanks)}" aria-label="${esc(f.question)}">
+<p class="am-feedback-q">${esc(f.question)}</p>
+<div class="am-feedback-votes" role="group" aria-label="${esc(f.question)}">${vote('up', f.yes)}${vote('down', f.no)}</div>
+<p class="am-feedback-status" role="status" aria-live="polite"></p>
+</section>
 `;
 }
 
@@ -320,7 +338,7 @@ ${cspMeta([script], { live: true })}
 <meta name="generator" content="Answer me with HTML ${VERSION}">
 <title>${esc(meta.title || 'Answer me with HTML')}</title>
 <style>
-${pageCss(embedded, { diff: body.includes('class="am-codeblock am-codeblock--diff"'), delta: hasDelta(body), rtl: language.dir === 'rtl', math: hasMath(body), chart: hasChart(body), update: Boolean(update), closeAfter, scale })}
+${pageCss(embedded, { diff: body.includes('class="am-codeblock am-codeblock--diff"'), delta: hasDelta(body), rtl: language.dir === 'rtl', math: hasMath(body), chart: hasChart(body), annotCss: hasAnnotCss(body), update: Boolean(update), closeAfter, scale })}
 </style>
 </head>
 <body>
@@ -333,7 +351,7 @@ ${scaleButtons(ui)}
 <button class="am-btn" type="button" data-am="copy" data-done="${esc(ui.done)}">${esc(ui.copy)}</button>
 </div>
 ${notice.popover}${withColophon(body, language)}
-${lightboxShell(ui, body.includes('class="am-diagram'))}${sourceTag(source)}
+${feedbackRow(ui)}${lightboxShell(ui, body.includes('class="am-diagram'))}${sourceTag(source)}
 <script>${script}</script>
 </body>
 </html>

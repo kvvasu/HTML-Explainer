@@ -114,7 +114,7 @@ export async function bundleEngine(outfile) {
     minify: true,
     legalComments: 'none',
     inject: [join(SRC, 'process-shim.js')],
-    plugins: [inlineAssets, nodeStub, temmlSource],
+    plugins: [inlineAssets({ aifig: false }), nodeStub, temmlSource],
     logLevel: 'warning',
   };
   const temmlFile = join(dirname(outfile), TEMML_FILE);
